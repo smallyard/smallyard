@@ -1,15 +1,15 @@
 # Site settings
 title: Smallyard Blog 
 header-img: img/home-bg.jpg
-email: huxpro@gmail.com
-description: "一生想做浪漫极客。@Hux黄玄的博客主页、个人网站, 知乎@黄玄／阿里@鬼栈／Front-End／UX Unicorn／Web &amp; Mobile Lover／Motion Design "
+email: liuhongqiang@live.cn
+description: "Smallyard 博客。 @小小已然 | @smallyard | @小院子 "
 baseurl: ""
-url: "http://huxpro.github.io"
-twitter_username: huxpro
-github_username:  huxpro
-facebook_username:  huxpro
-weibo_username: huxpro
-zhihu_username: huxpro
+url: "http://blog.smallyard.cn"
+#twitter_username: smallyard
+github_username:  liuhongqiang
+#facebook_username:  smallyard
+weibo_username: smallyard
+zhihu_username: smallyard
 
 # Build settings
 markdown: kramdown 
