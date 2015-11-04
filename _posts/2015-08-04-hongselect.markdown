@@ -19,14 +19,14 @@ tags:
 
 ## 目录构建
 
-1.  这个select插件，我给它起名叫*hongselect*，所以呢，首先建个*hongselect*的文件夹。
+1.  这个select插件，我给它起名叫`hongselect`，所以呢，首先建个`hongselect`的文件夹。
 2.  接着建一个src目录来放源码。
-3.  我想把源代码托管到*github*上，所以呢，再建一个*README.md*文件，来写这个插件的一个说明文档。
-4.  然后建一个*.gitignore*文件，来说明那些文件或文件夹是不需要加入代码版本管理的。
-5.  该插件依赖于*jQuery*，我们要下载它，对于js依赖，我们可以使用*bower*来管理，并使用*bower*来发布我们的插件。
-6.  使用*bower*，新建一个*bower.json*来配置。
-7.  最后代码的打包工作，使用*grunt*来对js，css，和img文件进行压缩。
-8.  使用*grunt*，新建一个*package.json*来配置。
+3.  我想把源代码托管到`github`上，所以呢，再建一个`README.md`文件，来写这个插件的一个说明文档。
+4.  然后建一个`.gitignore`文件，来说明那些文件或文件夹是不需要加入代码版本管理的。
+5.  该插件依赖于`jQuery`，我们要下载它，对于js依赖，我们可以使用`bower`来管理，并使用`bower`来发布我们的插件。
+6.  使用`bower`，新建一个`bower.json`来配置。
+7.  最后代码的打包工作，使用`grunt`来对js，css，和img文件进行压缩。
+8.  使用`grunt`，新建一个`package.json`来配置。
 
 最终的目录结构如下（上面没提到的文件接下来会介绍）：
 
@@ -34,11 +34,11 @@ tags:
 
 ## 源码书写
 
-在src中，再建两个文件夹，一个*css*文件夹，用来放样式文件；一个*img*文件夹，用来放图片文件。
+在src中，再建两个文件夹，一个`css`文件夹，用来放样式文件；一个`img`文件夹，用来放图片文件。
 
 ### JavaScript部分
 
-在src中，新建一个*hongselect.src.js*文件。
+在src中，新建一个`hongselect.src.js`文件。
 
 源码如下：
 
@@ -163,7 +163,7 @@ $.fn.hongselect = function (option) {
 
 ### 接下来是写css了
 
-在css中新建一个*hongselect.css*文件。
+在css中新建一个`hongselect.css`文件。
 
 ```
 .default_hongselect {
@@ -214,7 +214,7 @@ $.fn.hongselect = function (option) {
 
 ```
 
-### 将图片放入*img*文件
+### 将图片放入`img`文件
 
 OK，代码书写完毕。
 
@@ -246,15 +246,15 @@ OK，代码书写完毕。
 }
 ```
 
-在命令行使用命令下载*jQuery*，具体使用方法见*bower*官网。
+在命令行使用命令下载`jQuery`，具体使用方法见`bower`官网。
 
 ```
 bower install
 ```
 
-调用命令后，就会在当前目录下创建一个*bower_components*的文件夹，并将我们依赖的js下载到该目录。
+调用命令后，就会在当前目录下创建一个`bower_components`的文件夹，并将我们依赖的js下载到该目录。
 
-然后我们就可以引用它来做测试了，我们建一个*doc/example*来放我们的测试文件。
+然后我们就可以引用它来做测试了，我们建一个`doc/example`来放我们的测试文件。
 
 ```
 <html lang="en">
@@ -290,7 +290,7 @@ bower install
 
 好了，项目测试好之后我们就可以打包插件了。
 
-我们用*grunt*来打包它，*grunt*配置如下，具体使用方法见官网。
+我们用`grunt`来打包它，`grunt`配置如下，具体使用方法见官网。
 
 ### package.json
 
@@ -318,7 +318,7 @@ module.exports = function (grunt) {
         pkg: grunt.file.readJSON("package.json"),
         clean: {
             build: {
-                src: ["dist/**"]
+                src: ["dist/``"]
             }
         },
         uglify: {
@@ -352,7 +352,7 @@ module.exports = function (grunt) {
 
 ```
 
-用命令行调用grunt就会将压缩好的js、css、img放入*dist*目录。
+用命令行调用grunt就会将压缩好的js、css、img放入`dist`目录。
 
 ```
 grunt
@@ -361,7 +361,7 @@ grunt
 
 ## 发布
 
-通过*bower*命令发布
+通过`bower`命令发布
 
 ```
 bower register <my-package-name> <git-endpoint>
@@ -370,11 +370,11 @@ bower register <my-package-name> <git-endpoint>
 
 发布后可以在bower.io上查找到：
 
-!(bower)[http://images0.cnblogs.com/blog2015/463864/201508/041348353307752.png]
+![bower](http://images0.cnblogs.com/blog2015/463864/201508/041348353307752.png)
 
 ## 托管
 
-通过git将代码托管到*github*上。
+通过git将代码托管到`github`上。
 
 ```
 git add
@@ -383,4 +383,4 @@ git push
 
 ```
 
-(https://github.com/liuhongqiang/hongselect)[https://github.com/liuhongqiang/hongselect];
+[https://github.com/liuhongqiang/hongselect](https://github.com/liuhongqiang/hongselect)
