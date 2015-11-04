@@ -3,7 +3,7 @@ layout:     post
 title:      "一个简单js select插件"
 subtitle:   "hongselect开发笔记"
 date:       2015-08-04
-author:     "Hux"
+author:     "liuhongqiang"
 tags:
     - 前端开发
     - JavaScript
@@ -11,11 +11,13 @@ tags:
 
 
 
-> 现在，通过一个select插件，来介绍一下js插件的构建过程。
+> 通过一个select插件，来介绍一下js插件的构建过程。
+
 
 ## 先上效果图
 
-![hongselect](http://images0.cnblogs.com/blog2015/463864/201508/041646179237937.png)
+![hongselect](/img/in-post/hongselect.jpg)
+
 
 ## 目录构建
 
@@ -31,6 +33,7 @@ tags:
 最终的目录结构如下（上面没提到的文件接下来会介绍）：
 
 ![dir](http://images0.cnblogs.com/blog2015/463864/201508/041320328143905.png)
+
 
 ## 源码书写
 
@@ -218,6 +221,7 @@ $.fn.hongselect = function (option) {
 
 OK，代码书写完毕。
 
+
 ##测试
 
 配置bower.json
@@ -285,6 +289,7 @@ bower install
 </body>
 </html>
 ```
+
 
 ## 打包
 
@@ -359,6 +364,7 @@ grunt
 
 ```
 
+
 ## 发布
 
 通过`bower`命令发布
@@ -371,6 +377,7 @@ bower register <my-package-name> <git-endpoint>
 发布后可以在bower.io上查找到：
 
 ![bower](http://images0.cnblogs.com/blog2015/463864/201508/041348353307752.png)
+
 
 ## 托管
 
