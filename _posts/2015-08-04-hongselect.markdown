@@ -1,7 +1,7 @@
 ---
 layout:     post
 title:      "一个简单js select插件"
-subtitle:   "hongselect开发笔记"
+subtitle:   "hongselect 开发笔记"
 date:       2015-08-04
 author:     "liuhongqiang"
 tags:
