@@ -1,3 +1,3 @@
-#Hux Blog
+#My Blog
 
-My Blog
+[http://blog.smallyard.cn](http://blog.smallyard.cn)
