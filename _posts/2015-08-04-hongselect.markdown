@@ -3,7 +3,7 @@ layout:     post
 title:      "一个简单js select插件"
 subtitle:   "hongselect 开发笔记"
 date:       2015-08-04
-author:     "liuhongqiang"
+author:     "smallyard"
 tags:
     - 前端开发
     - JavaScript
