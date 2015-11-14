@@ -36,7 +36,8 @@
                             </span>
                         </a>
                     </li>
-                                        {% endif %}
+                    {% endif %}
+
                     {% if site.github_username %}
                     <li>
                         <a target="_blank" href="https://github.com/{{ site.github_username }}">
@@ -57,13 +58,13 @@
 </footer>
 
 <!-- jQuery -->
-<script src="{{ "/js/jquery.min.js " | prepend: site.baseurl }}"></script>
+<script src="{{ '/js/jquery.min.js ' | prepend: site.baseurl }}"></script>
 
 <!-- Bootstrap Core JavaScript -->
-<script src="{{ "/js/bootstrap.min.js " | prepend: site.baseurl }}"></script>
+<script src="{{'/js/bootstrap.min.js ' | prepend: site.baseurl }}"></script>
 
 <!-- Custom Theme JavaScript -->
-<script src="{{ "/js/smallyard.min.js " | prepend: site.baseurl }}"></script>
+<script src="{{ '/js/smallyard.min.js ' | prepend: site.baseurl }}"></script>
 
 <!-- TODO: only load in tag.html -->
 <script src="/js/jquery.tagcloud.js" type="text/javascript" charset="utf-8"></script>

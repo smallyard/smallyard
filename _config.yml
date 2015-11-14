@@ -4,9 +4,9 @@ header-img: img/home-bg.jpg
 email: liuhongqiang@live.cn
 description: "Smallyard 博客。 @小小已然 | @smallyard | @小院子 "
 baseurl: ""
-url: "http://blog.smallyard.cn"
+url: "http://smallyard.cn"
 #twitter_username: smallyard
-github_username:  liuhongqiang
+github_username:  smallyard
 #facebook_username:  smallyard
 weibo_username: 232212306
 zhihu_username: smallyard
