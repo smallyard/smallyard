@@ -43,6 +43,16 @@ module.exports = function (grunt) {
                 }
             }
         },
+        imagemin: {
+            dist: {
+                files: [{
+                    expand: true,                  // Enable dynamic expansion
+                    cwd: 'img/',                   // Src matches are relative to this path
+                    src: ['**/*.{png,jpg,gif}'],   // Actual patterns to match
+                    dest: 'img/'                  // Destination path prefix
+                }]
+            }
+        },
         watch: {
             scripts: {
                 files: ['js/<%= pkg.name %>.js'],
@@ -66,8 +76,9 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-banner');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-contrib-imagemin');
 
     // Default task(s).
-    grunt.registerTask('default', ['uglify', 'less', 'usebanner']);
+    grunt.registerTask('default', ['uglify', 'less', 'imagemin' , 'usebanner']);
 
 };
