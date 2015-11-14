@@ -230,9 +230,9 @@ OK，代码书写完毕。
 {
   "name": "hongselect",
   "version": "0.0.1",
-  "homepage": "https://github.com/liuhongqiang/hongselect",
+  "homepage": "https://github.com/smallyard/hongselect",
   "authors": [
-    "liuhongqiang <liuhongqiang@live.cn>"
+    "smallyard <liuhongqiang@live.cn>"
   ],
   "description": "A simple web select.",
   "main": "src/hongselect.src.js",
@@ -390,4 +390,4 @@ git push
 
 ```
 
-[https://github.com/liuhongqiang/hongselect](https://github.com/liuhongqiang/hongselect)
+[https://github.com/smallyard/hongselect](https://github.com/smallyard/hongselect)
