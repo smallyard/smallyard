@@ -1,0 +1,162 @@
+---
+layout:     post
+title:      "基于nodejs的终端天气查询"
+subtitle:   "命令行天气查询"
+date:       2015-11-04
+author:     "smallyard"
+tags:
+    - JavaScript
+---
+
+## 国际惯例，先上效果图
+
+![tianqi](http://images2015.cnblogs.com/blog/463864/201511/463864-20151106221827258-2005760871.jpg)
+
+>前天，突然想到，怎么直接在命令行查询天气呢？好的，那就写一个吧。然后就开始找城市、天气的api接口，最终做出来这么一个东西。
+
+```
+/* 安装方法 */
+$ npm install tianqi -g
+```
+
+
+## 一、 天气接口
+
+网上搜了一个，最开始准备使用中国天气网的数据接口，但是需要注册，也行，注册就注册吧。
+注册好了，又提示信息不完整，好吧，填写姓名、身份证...
+最后，还要上传身份证信息，看到这我不想用它了，紧接着发现，还要填写使用该接口的服务器ip。
+顿时，心中十万个那个啥呼啸而过...
+这时想起百度的产品里有个API store，搜索了下，果然找到了合适的接口。
+
+#### 城市接口
+
+http://apistore.baidu.com/microservice/cityinfo?cityname=城市名
+
+```
+{
+    "errNum": 0,
+    "retMsg": "success",
+    "retData": {
+        "cityName": "\u5317\u4eac",
+        "provinceName": "\u5317\u4eac",
+        "cityCode": "101010100",
+        "zipCode": "100000",
+        "telAreaCode": "010"
+    }
+}
+```
+
+#### 天气接口
+
+http://apis.baidu.com/apistore/weatherservice/recentweathers?cityid=城市编码
+
+>该请求需要在header中添加apikey字段，该值可以在[百度天气接口](http://apistore.baidu.com/apiworks/servicedetail/112.html)中获取。
+
+
+## 二、 代码编写
+
+
+#### 1. bin/tianqi 天气入口代码
+
+```
+#!/usr/bin/env node
+
+require("colorful").toxic();
+
+var package = require("../package")
+
+if (!process.argv[2]) {
+  console.log('tianqi ~ ' + package.version.green);
+  console.log(package.description.grey);
+  console.log("  $ ".cyan + "tianqi 北京");
+  console.log("  $ ".cyan + "tianqi 上海");
+  return;
+}
+
+console.log();
+
+var tianqi = require('..');
+tianqi(process.argv.slice(2).join(' '));
+```
+
+第一行，设置该文件将被`node`来执行。
+如果没有参数，则输出`tianqi`的版本信息和使用示例。
+如果有参数，则调用*index.js*的函数。
+
+#### 2.index.js 主函数
+
+```
+var request = require("request");
+var config = require("./lib/config");
+var print = require("./lib/print");
+
+module.exports = function (word) {
+    word = encodeURIComponent(word);
+    request.get(config.city + word, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            var cityResult = JSON.parse(body);
+            if (cityResult.errNum == 0) {
+                var options = {
+                    url: config.weather + cityResult.retData.cityCode,
+                    headers: {
+                        "apikey": config.apikey
+                    }
+                };
+                request.get(options, function (error, response, body) {
+                    if (!error && response.statusCode == 200) {
+                        print.print(JSON.parse(body));
+                    }
+                });
+            } else {
+                console.log(cityResult.retMsg.red);
+            }
+        }
+    });
+};
+```
+
+首先，请求城市接口，获取用户输入城市的编码。
+然后请求天气接口，获取天气数据。
+最后调用print.js，输出天气信息。
+
+#### 3.print.js 输出信息
+
+```
+exports.print = function (data) {
+    if (data.errNum == 0) {
+        var today = data.retData.today;
+        var todayStr = " 今天天气 " + today.type.magenta;
+        todayStr += "  当前温度 " + today.curTemp.green;
+        todayStr += "  最低温度 " + today.lowtemp.blue;
+        todayStr += "  最高温度 " + today.hightemp.red;
+        todayStr += "  风力 " + today.fengli.yellow;
+        console.log(todayStr);
+        console.log();
+
+        var forecast = data.retData.forecast;
+        console.log(" 未来四天预报~".cyan);
+        console.log();
+        forecast.forEach(function (data) {
+            var str = " " + data.date + " " + data.type.magenta;
+            str += " 最低温度 " + data.lowtemp.blue;
+            str += "  最高温度 " + data.hightemp.red;
+            str += "  风力 " + data.fengli.yellow;
+            console.log(str);
+            console.log();
+        });
+    } else {
+        console.log(data.errMsg.red);
+    }
+};
+```
+
+这个比较简单，就不解释了。
+
+
+## 三、 总结
+
+这个`tianqi`查询软件，算是自己对`nodejs`的一次简单的实践吧。
+所用到的知识点包括**http请求、JSON的解析、npm包的发布**。
+总的说起来，还是比较简单的，分享给大家。
+源码发布在`github`：[https://github.com/smallyard/tianqi](https://github.com/smallyard/tianqi)
+随时欢迎大家提`issue`，或发起`pull request`来完善它，谢谢。
