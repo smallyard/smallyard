@@ -1,0 +1,203 @@
+---
+layout:     post
+title:      "js异步状态监控"
+subtitle:   "watch js"
+date:       2015-11-18
+author:     "smallyard"
+tags:
+    - JavaScript
+---
+
+>说明：写这篇文章，是希望被吐槽的。
+
+## 一、背景
+
+在做报表页面的时候，页面上有很多的异步加载，而设计的loading是个全局的，一个页面就有一个。
+
+控制loading什么时候出现，什么时候消失，要实时的知道页面上异步加载的东西是否执行完毕，只有所有的异步都加载完，loading才能停止。
+
+并且，如果用户操作了页面，某个局部又要开始加载，loading要被通知到，执行loading效果。
+
+问题的难点有两个：
+
+1.怎么知道所有的异步都加载完闭了呢？
+
+2.如何通知loading？
+
+
+## 二、思路
+
+#### 1.思路一
+
+设计一个外部状态map，异步执行完毕，就修改外部变量的值。开一个计时器，不断的这个map，如果全部加载完毕，就停止loading。
+
+```
+// 状态集合
+  var statusMap = {
+      "异步1": false,
+      "异步2": false
+      // ...
+  };
+  
+ // 计时器不断检查状态
+ setInterval(function () {
+     // 检查statusMap
+     if (isReady(statusMap)) {
+         // show loading
+     } else {
+         // hide loading
+     }
+ }, 1000);
+ 
+ //异步
+ $.ajax({
+     //...
+     success: function () {
+         statusMap["异步1"] = true；
+     }
+ });
+
+```
+
+这个方案虽然能解决问题，但是太不够优雅，呵呵呵呵......
+
+#### 2.思路二
+
+使用promise或者jQuery的deferred（@上位者的怜悯 提供的建议）。
+
+```
+$.when(异步1，异步2).done(function(){
+    // show loading
+}).fail(function(){
+    // hide loading
+});
+```
+
+这个方案有个弊端，一旦异步加载完毕，不能修改promise的状态了，因此不适合这个场景。
+
+#### 3.思路三
+
+自己造轮子**基于事件监听的，一个状态改变，就扫一遍所有监听的对象，最后再根据用状态，回调对应的函数。**
+
+
+## 三、思路三实现
+
+```
+(function (win) {
+    var watch = function () {
+        var that = this;
+        // arr
+        if (arguments.length == 1 && Object.prototype.toString.call(arguments[0]) === "[object Array]") {
+            that.watchArr = arguments[0];
+        } else {
+            that.watchArr = Array.prototype.slice.call(arguments);
+        }
+        that.watchArr.forEach(function (fairy) {
+            fairy.watch = that;
+        });
+        that.isReady = true;
+        return that;
+    };
+    watch.prototype = {
+        ready: function (callback) {
+            this.readyHandler = callback;
+            this.check();
+            return this;
+        },
+        unready: function (callback) {
+            this.unReadyHandler = callback;
+            this.check();
+            return this;
+        },
+        add: function (fairy, check) {
+            this.watchArr.push(fairy);
+            if (check === undefined || check === true) {
+                this.check();
+            }
+            return this;
+        },
+        check: function () {
+            var nowIsReady = this.watchArr.every(function (fairy) {
+                return fairy.isReady;
+            });
+            if (nowIsReady != this.isReady) {
+                if (nowIsReady) {
+                    if (this.readyHandler) {
+                        this.readyHandler.call();
+                        this.isReady = true;
+                    }
+                } else {
+                    if (this.unReadyHandler) {
+                        this.unReadyHandler.call();
+                        this.isReady = false;
+                    }
+                }
+            }
+        },
+        setIsReadyById: function (id, isReady, check) {
+            var index = this.watchArr.indexOf(function (fairy) {
+                fairy.id = id;
+            });
+            this.watchArr[index].isReady = isReady;
+            if (check === undefined || check === true) {
+                this.check();
+            }
+        },
+        setIsReadyAll: function (isReady, check) {
+            this.watchArr.forEach(function (fairy) {
+                fairy.isReady = isReady;
+            });
+            if (check === undefined || check === true) {
+                this.check();
+            }
+        }
+    };
+
+    var fairy = function (isReady) {
+        this.id = new Date().getTime();
+        this.isReady = isReady || false;
+    };
+    fairy.prototype = {
+        toReady: function () {
+            this.isReady = true;
+            this.watch.check();
+        },
+        toUnReady: function () {
+            this.isReady = false;
+            this.watch.check();
+        }
+    };
+
+    win.Watch = watch;
+    win.Fairy = fairy;
+})(window);
+```
+
+```
+// 用例
+var loader = new Loader();
+var listFairy = new Fairy();
+var chartFairy = new Fairy();
+var watch = new Watch(listFairy, chartFairy);
+watch.ready(function () {
+    loader.stop();
+}).unready(function () {
+    loader.start();
+});
+
+//异步
+$.ajax({
+    //...
+    success: function () {
+        listFairy.toReady();
+    }
+});
+```
+
+纳尼，说好的事件呢，哪里去了。
+
+好吧，吐槽点来了，实现的过程中，发现其实没必要用事件。
+
+实现到最后，发现它其实就是一个变相的思路一。
+
+the end **未完不续 ...**
