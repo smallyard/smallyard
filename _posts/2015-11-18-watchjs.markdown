@@ -1,7 +1,6 @@
 ---
 layout:     post
 title:      "js异步状态监控"
-subtitle:   "watch js"
 date:       2015-11-18
 author:     "smallyard"
 tags:
@@ -26,6 +25,7 @@ tags:
 
 
 ## 二、思路
+
 
 #### 1.思路一
 
@@ -200,4 +200,4 @@ $.ajax({
 
 实现到最后，发现它其实就是一个变相的思路一。
 
-the end **未完不续 ...**
+**The End 未完不续 ...**
