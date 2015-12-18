@@ -47,8 +47,8 @@ $("#btnSubmit").click(function () {
 	var $inputCmd = $("#inputCmd");
 	var $inputTopic = $("#inputTopic");
 	var $spanInfo = $("#spanInfo");
-    var cmd = inputCmd.val();
-    var topic = inputTopic.val();
+    var cmd = $inputCmd.val();
+    var topic = $inputTopic.val();
     if (!cmd) {
         $spanInfo.text("命令不能为空");
         return;
