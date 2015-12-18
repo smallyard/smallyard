@@ -75,7 +75,7 @@ $("#btnSubmit").click(function () {
 
     $inputCmd.val("").focus();
     // $inputTopic.val("");
-    $spanInfo.empty();
+    $spanInfo.text("已发送");
 });
 
 // 绑定回车事件
