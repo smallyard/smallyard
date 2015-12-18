@@ -1,6 +1,7 @@
 ---
 layout: page
 title: "Jobhub"
+description: "----通过web远程控制"
 ---
 
 <div class="zh">
@@ -20,14 +21,22 @@ title: "Jobhub"
         <div class="form-group">
             <div class="col-sm-offset-2 col-sm-10">
                 <input type="button" id="btnSubmit" class="btn btn-default" value="执行">
+                <span id="spanInfo" class="error-info"></span>
             </div>
         </div>
-        <span id="spanInfo"></span>
+        <div class="form-group">
+            <label for="div_msg" class="col-sm-2 control-label"></label>
+            <div class="col-sm-10">
+                <div class="well" id="div_msg">
+                    <p># 执行结果</p>
+                </div>
+            </div>
+        </div>
     </form>
 </div>
 
+<link rel="stylesheet" href="../css/jobhub.css">
 <script type="text/javascript" src="../js/socket.io-1.3.5.min.js"></script>
 <script type="text/javascript" src="../js/yunba-js-sdk.js"></script>
 <script type="text/javascript" src="../js/jquery.js"></script>
 <script type="text/javascript" src="../js/jobhub.js"></script>
-
