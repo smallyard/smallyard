@@ -44,9 +44,11 @@ function send(cmd, topic) {
 }
 
 $("#btnSubmit").click(function () {
-    var cmd = $("#inputCmd").val();
-    var topic = $("#inputTopic").val();
-    var $spanInfo = $("#spanInfo");
+	var $inputCmd = $("#inputCmd");
+	var $inputTopic = $("#inputTopic");
+	var $spanInfo = $("#spanInfo");
+    var cmd = inputCmd.val();
+    var topic = inputTopic.val();
     if (!cmd) {
         $spanInfo.text("命令不能为空");
         return;
@@ -61,6 +63,10 @@ $("#btnSubmit").click(function () {
     } else {
         connect(cmd, topic)
     }
+
+    $inputCmd.val("");
+    $inputTopic.val("");
+    $spanInfo.empty();
 });
 
 
