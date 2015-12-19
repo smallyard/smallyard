@@ -11,22 +11,21 @@ function connect(cmd, topic) {
                 if (success) {
                     hasConnect = true;
                     console.log('你已成功连接到消息服务器，会话ID：' + sessionid);
-                    send(cmd, topic);
+                    // 监听回传消息
+                    yunba.subscribe({'topic': topic + appkey},
+                    function (success, msg) {
+                        if (success) {
+                            console.log('你已成功订阅频道' + topic + appkey);
+                            yunba.set_message_cb(showMsg);
+                            send(cmd, topic);
+                        } else {
+                            console.log(msg);
+                        }
+                    });
                 } else {
                     console.log(msg);
                 }
             });
-            // 监听回传消息
-            yunba.subscribe({'topic': topic + appkey},
-            function (success, msg) {
-                if (success) {
-                    console.log('你已成功订阅频道' + topic);
-                } else {
-                    console.log(msg);
-                }
-            });
-
-            yunba.set_message_cb(showMsg);
         }
     });
 }
