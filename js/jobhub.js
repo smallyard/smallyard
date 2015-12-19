@@ -45,9 +45,18 @@ function send(cmd, topic) {
 
 // 显示回传消息
 function showMsg(data){
-    console.log('Topic:' + data.topic + ',Msg:' + data.msg);
+    var msg = data.msg;
+    console.log('Topic:' + data.topic + ',Msg:' + msg);
+
+    // 替换回车
+    msg = msg.replace(/\r\n|\n/g,"<br/>");
+    // 替换执行失败
+    msg = msg.replace("执行失败", "<span style='color:red;'>执行失败</span>");
+
+    // 显示
     var $divMsg = $("#div_msg");
-    $divMsg.append("<p>" + data.msg + "</p>");
+    $divMsg.append("<p>" + msg + "</p>");
+
     // 滚动到最下方
     $divMsg.scrollTop($divMsg[0].scrollHeight );
 }
@@ -75,7 +84,7 @@ $("#btnSubmit").click(function () {
 
     $inputCmd.val("").focus();
     // $inputTopic.val("");
-    $spanInfo.text("已发送");
+    $spanInfo.text("已发送命令：" + cmd);
 });
 
 // 绑定回车事件

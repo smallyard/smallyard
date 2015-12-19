@@ -1,7 +1,6 @@
 #div_msg{
     color: gray;
     font-size: small;
-    line-height: 0;
     max-height: 300px;
     overflow-y: auto;
 }
