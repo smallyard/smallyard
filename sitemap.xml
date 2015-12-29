@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<!-- created with Free Online Sitemap Generator www.xml-sitemaps.com -->
+
+<url>
+  <loc>http://smallyard.cn/</loc>
+  <lastmod>2015-12-28T10:19:28+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://smallyard.cn/about/</loc>
+  <lastmod>2015-12-28T10:19:28+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://smallyard.cn/jobhub/</loc>
+  <lastmod>2015-12-28T10:19:28+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://smallyard.cn/tags/</loc>
+  <lastmod>2015-12-28T10:19:28+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://smallyard.cn/2015/11/18/watchjs/</loc>
+  <lastmod>2015-12-28T10:19:28+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://smallyard.cn/2015/11/04/tianqi/</loc>
+  <lastmod>2015-12-28T10:19:28+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://smallyard.cn/2015/08/22/dear-fox/</loc>
+  <lastmod>2015-12-28T10:19:28+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+<url>
+  <loc>http://smallyard.cn/2015/08/04/hongselect/</loc>
+  <lastmod>2015-12-28T10:19:28+00:00</lastmod>
+  <changefreq>monthly</changefreq>
+</url>
+</urlset>
