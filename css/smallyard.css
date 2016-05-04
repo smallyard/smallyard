@@ -1,8 +1,3 @@
-/*!
- * smallyard blog v1.0.0 (http://smallyard.cn)
- * Copyright 2015 smallyard
- */
-
 body {
   font-family: "Helvetica Neue", Arial, "Hiragino Sans GB", "STHeiti", "Microsoft YaHei", "WenQuanYi Micro Hei", SimSun, sans-serif;
   line-height: 1.7;
@@ -344,9 +339,6 @@ hr.small {
   font-size: 13px;
   font-style: italic;
   color: #a3a3a3;
-}
-.post-content-preview:hover {
-  color: #0085a1;
 }
 @media only screen and (min-width: 768px) {
   .post-content-preview {
