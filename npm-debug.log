@@ -1,0 +1,29 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'run',
+1 verbose cli   'preview' ]
+2 info using npm@1.4.28
+3 info using node@v0.10.33
+4 verbose node symlink C:\Program Files\nodejs\\node.exe
+5 verbose run-script [ 'preview' ]
+6 info preview smallyard@1.0.0
+7 verbose unsafe-perm in lifecycle true
+8 info smallyard@1.0.0 Failed to exec preview script
+9 error smallyard@1.0.0 preview: `cd _site; python -m SimpleHTTPServer 8020`
+9 error Exit status 1
+10 error Failed at the smallyard@1.0.0 preview script.
+10 error This is most likely a problem with the smallyard package,
+10 error not with npm itself.
+10 error Tell the author that this fails on your system:
+10 error     cd _site; python -m SimpleHTTPServer 8020
+10 error You can get their info via:
+10 error     npm owner ls smallyard
+10 error There is likely additional logging output above.
+11 error System Windows_NT 6.2.9200
+12 error command "C:\\Program Files\\nodejs\\\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "run" "preview"
+13 error cwd H:\smallyard
+14 error node -v v0.10.33
+15 error npm -v 1.4.28
+16 error code ELIFECYCLE
+17 verbose exit [ 1, true ]
