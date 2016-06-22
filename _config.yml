@@ -12,12 +12,8 @@ weibo_username: 232212306
 zhihu_username: smallyard
 
 # Build settings
-markdown: kramdown 
-
-# markdown: redcarpet
-# redcarpet can auto highlight code, but the lack of header-id make the catalog impossible 
-
-highlighter: pygments
+markdown: kramdown
+highlighter: rouge
 permalink: pretty
 paginate: 20
 exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
