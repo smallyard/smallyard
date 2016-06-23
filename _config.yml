@@ -17,6 +17,7 @@ highlighter: rouge
 permalink: pretty
 paginate: 20
 exclude: ["less","node_modules","Gruntfile.js","package.json","README.md"]
+gems: [jekyll-paginate]
 
 # use Github Flavored Markdown !important
 # document: http://jekyllrb.com/docs/configuration/#kramdown
