@@ -1,0 +1,299 @@
+---
+layout:     post
+title:      "写一个web远程控制小工具"
+subtitle:   "基于命令行的小工具"
+date:       2015-12-24
+author:     "smallyard"
+tags:
+    - JavaScript
+---
+
+## 国际惯例，先上效果图
+
+![jobhub](http://images2015.cnblogs.com/blog/463864/201512/463864-20151224130854390-1342091016.jpg)
+
+>晚上躺床上了，发现忘关电脑了，又不想起来关，来用手机控制电脑多好，百度了下，果然一大把。哈，我自己为什么不自己也实现个呢，任意的自己diy。Just do it。如果不想看如何实现，那么直接用下面的吧：
+
+web操控端：http://smallyard.cn/jobhub/
+
+控制端jar包: http://files.cnblogs.com/files/smallyard/jobhub-client.rar
+
+```
+/* 运行方法 */
+$ java -jar joghub-client.jar [你的密码]
+```
+
+
+## 一、 网络通信
+
+网络通信模块，如果自己做的话，也不是很难，就是做好了，需要买服务器来部署，这还是算了吧，为了自己玩一玩而花钱，这种事还是不干，那就用第三方的好了。
+
+上网时，偶然发现的一个云吧，提供消息发送和消息订阅的服务。我们只需要用它把我们的控制端web和客户端监听连接起来就行了。
+
+它有java和JavaScript的API。
+
+这时想起百度的产品里有个API store，搜索了下，果然找到了合适的接口。
+
+
+## 二、  客户端
+
+客户端的主要任务是接受命令并执行命令，执行命令我通过调用命令行来执行。
+
+命令监听和发送类，主要是调用云吧的API。
+
+```
+/**
+ * 任务监听者
+ */
+public class JobHandler {
+ 
+    private static final String APP_KEY = "567392ee4407a3cd028aacf6";
+ 
+    private static MqttAsyncClient mqttAsyncClient;
+ 
+    private static String listenTopic;
+ 
+    static {
+        try {
+            mqttAsyncClient = MqttAsyncClient.createMqttClient(APP_KEY);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+ 
+    /**
+     * 监听开始
+     */
+    public static void start(final String topic) {
+        listenTopic = topic;
+        connect();
+        listen();
+    }
+ 
+    public static void publish(String msg) {
+        try {
+            mqttAsyncClient.publish(listenTopic + APP_KEY, msg.getBytes(), 1, false, null, new IMqttActionListener() {
+ 
+                public void onFailure(IMqttToken arg0, Throwable arg1) {
+                    System.out.println("消息返回失败");
+                }
+ 
+                public void onSuccess(IMqttToken arg0) {
+                    System.out.println("消息返回成功");
+                }
+            });
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+ 
+    // 连接服务器
+    private static void connect() {
+        try {
+            mqttAsyncClient.connect(new IMqttActionListener() {
+                public void onSuccess(IMqttToken arg0) {
+                    System.out.println("连接服务器成功.");
+                    subscribe();
+                }
+ 
+                public void onFailure(IMqttToken arg0, Throwable arg1) {
+                    System.out.println("连接服务器失败");
+                }
+            });
+        } catch (MqttException e) {
+            e.printStackTrace();
+        }
+    }
+ 
+    private static void subscribe() {
+        try {
+            mqttAsyncClient.subscribe(listenTopic, 1, null, new IMqttActionListener() {
+                public void onSuccess(IMqttToken asyncActionToken) {
+                    System.out.println("成功监听主题: " + StringUtils.join(asyncActionToken.getTopics(), ","));
+                }
+ 
+                public void onFailure(IMqttToken asyncActionToken, Throwable exception) {
+                    System.err.println("监听失败");
+                }
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+ 
+    // 监听消息
+    private static void listen() {
+        mqttAsyncClient.setCallback(new MqttCallback() {
+            public void connectionLost(Throwable throwable) {
+ 
+            }
+ 
+            public void messageArrived(String topic, MqttMessage message) throws Exception {
+                String cmd = new String(message.getPayload());
+                System.out.println("接收到命令：" + cmd);
+                Thread thread = new Thread(new JobExecutor(cmd));
+                thread.start();
+            }
+ 
+            public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
+ 
+            }
+        });
+    }
+}
+```
+
+命令执行类，调用命令行执行命令，再调用云吧API来发送执行结果。
+
+```
+/**
+ * 任务执行
+ */
+public class JobExecutor implements Runnable {
+ 
+    private String cmd;
+ 
+    public JobExecutor(String cmd) {
+        this.cmd = cmd;
+    }
+ 
+    public void run() {
+        BufferedReader br = null;
+        try {
+            Process p = Runtime.getRuntime().exec(this.cmd);
+            br = new BufferedReader(new InputStreamReader(p.getInputStream()));
+            String line;
+            StringBuilder sb = new StringBuilder();
+            while ((line = br.readLine()) != null) {
+                sb.append(line).append("\n");
+            }
+            System.out.println(sb.toString());
+            JobHandler.publish(sb.toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+            JobHandler.publish("执行失败");
+        } finally {
+            if (br != null) {
+                try {
+                    br.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+}
+```
+
+## 三、WEB端
+
+web端的主要任务是发送命令，并接受命令执行的结果。
+
+```
+var hasConnect = false;
+var appkey = "567392ee4407a3cd028aacf6";
+var yunba = new Yunba({server: 'sock.yunba.io', port: 3000, appkey: appkey});
+ 
+// 连接服务器并发送消息
+function connect(cmd, topic) {
+    yunba.init(function (success) {
+        if (success) {
+            // 连接服务器
+            yunba.connect_by_customid('jobhub-web', function (success, msg, sessionid) {
+                if (success) {
+                    hasConnect = true;
+                    console.log('你已成功连接到消息服务器，会话ID：' + sessionid);
+                    // 监听回传消息
+                    yunba.subscribe({'topic': topic + appkey},
+                    function (success, msg) {
+                        if (success) {
+                            console.log('你已成功订阅频道' + topic + appkey);
+                            yunba.set_message_cb(showMsg);
+                            send(cmd, topic);
+                        } else {
+                            console.log(msg);
+                        }
+                    });
+                } else {
+                    console.log(msg);
+                }
+            });
+        }
+    });
+}
+ 
+// 发送消息
+function send(cmd, topic) {
+    yunba.publish({'topic': topic, 'msg': cmd},
+    function (success, msg) {
+        if (success) {
+            console.log('消息发布成功');
+        } else {
+            console.log(msg);
+        }
+    });
+}
+ 
+// 显示回传消息
+function showMsg(data){
+    var msg = data.msg;
+    console.log('Topic:' + data.topic + ',Msg:' + msg);
+ 
+    // 替换回车
+    msg = msg.replace(/\r\n|\n/g,"<br/>");
+    // 替换执行失败
+    msg = msg.replace("执行失败", "<span style='color:red;'>执行失败</span>");
+ 
+    // 显示
+    var $divMsg = $("#div_msg");
+    $divMsg.append("<p>" + msg + "</p>");
+ 
+    // 滚动到最下方
+    $divMsg.scrollTop($divMsg[0].scrollHeight );
+}
+ 
+$("#btnSubmit").click(function () {
+    var $inputCmd = $("#inputCmd");
+    var $inputTopic = $("#inputTopic");
+    var $spanInfo = $("#spanInfo");
+    var cmd = $inputCmd.val();
+    var topic = $inputTopic.val();
+    if (!cmd) {
+        $spanInfo.text("命令不能为空");
+        return;
+    }
+    if (!topic) {
+        $spanInfo.text("密码不能为空");
+        return;
+    }
+ 
+    if (hasConnect) {
+        send(cmd, topic);
+    } else {
+        connect(cmd, topic)
+    }
+ 
+    $inputCmd.val("").focus();
+    // $inputTopic.val("");
+    $spanInfo.text("已发送命令：" + cmd);
+});
+ 
+// 绑定回车事件
+$(document).keydown(function(e){
+    if(e.keyCode==13){
+        $("#btnSubmit").click();
+    }
+});
+```
+
+## 四、总结
+
+想着很复杂，其实实现起来很简单的。
+
+源码发布在github：
+
+[https://github.com/smallyard/smallyard](https://github.com/smallyard/smallyard)
+
+[https://github.com/smallyard/jobhub-client](https://github.com/smallyard/jobhub-client)
+
+大家可以自己拿走扩充成自己喜欢的远程控制。
