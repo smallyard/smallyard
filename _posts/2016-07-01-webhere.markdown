@@ -1,0 +1,84 @@
+---
+layout:     post
+title:      "nodejs npm应用 - webhere"
+date:       2016-07-01
+author:     "smallyard"
+tags:
+    - JavaScript
+    - npm
+---
+
+## 前言、没图不说话，先上图。
+
+![webhere](http://images2015.cnblogs.com/blog/463864/201607/463864-20160701115643577-2023132677.jpg)
+
+What's webhere?
+
+有没有遇到这样的场景：写程序的时候，需要访问一个文件，这个文件 需要是放到一台web服务器上，但是你不是开发的web应用。
+
+所以呢，你不得不去找一个web服务器，把你的文件上传上去，或者干脆直接创建一个web应用程序...
+
+webhere就是来解决这个问题，在你想要当做web根目录的目录下，打开你亲爱的命令行，敲下webhere，回车，搞定。
+
+然后就可以通过web浏览器访问目录下的文件了。
+
+```shell
+# 安装
+$ npm install webhere -g
+
+# 运行
+$ webhere
+```
+
+
+## 一、 原理
+
+原理比较简单，一句话来说，就是搭建一个web服务器。
+
+1.用nodejs的http包创建一个web服务。
+
+2.对访问路径路由到具体的文件路径。
+
+3.根据文件是否存在写具体的响应码，根据文件的后缀写具体Content-type。
+
+4.返回文件的内容，响应结束。
+
+
+## 二、 实现
+
+源码发布在[github](https://github.com/smallyard/webhere)上，可以直接去看。
+
+
+## 三、 用例
+
+```shell
+#create a web server in the current directory with default port 9000
+$ webhere
+```
+
+```shell
+#create a web server with port 5000
+$ webhere -p 5000
+```
+
+```shell
+#create a web server in the /home directory with port 5000
+$ webhere -p 5000 -b /home
+```
+
+```shell
+#don't open browser
+$ webhere -s
+```
+
+## 四、 参数
+
+```
+Usage: webhere [options]
+Options:
+   -h, --help             output usage information
+   -V, --version          output the version number
+   -p, --port <n>         port of web (default 9000)
+   -b, --basePath <path>  base path of web (default .)
+   -s, --silent           silent mode, don't open browser
+```
