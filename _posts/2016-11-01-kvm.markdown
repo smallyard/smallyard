@@ -1,0 +1,160 @@
+---
+layout:     post
+title:      "linux命令行安装使用KVM"
+date:       2016-11-01
+author:     "smallyard"
+tags:
+    - linux
+---
+
+## 一、说明
+
+本篇文章介绍的是基于`centos`环境来安装的，ip地址`192.168.4.233`
+
+
+## 二、检查CPU是否支持虚拟技术
+
+```
+egrep 'vmx|svm' /proc/cpuinfo
+```
+如果有输出内容表示支持。
+
+
+## 三、安装KVM
+
+### 1、安装组件
+
+```
+yum install kvm
+yum install qemu qemu-kvm -y
+yum -y install libvirt virt-viewer libpk-gtk-module.so
+```
+
+### 2、配置
+
+vim /etc/libvirt/libvirtd.conf 这里主要是tcp连接的设置
+
+末尾添加:
+
+```
+listen_tls = 0
+listen_tcp = 1
+tcp_port = "16509"
+listen_addr = "192.168.4.233"
+unix_sock_ro_perms = "0777"
+unix_sock_rw_perms = "0770"
+auth_tcp = "none"
+max_clients = 1024
+min_workers = 100
+max_workers = 200
+max_requests = 20
+max_client_requests = 50
+```
+
+vim /etc/libvirt/qemu.conf 这里主要是对vnc的设置，一会儿通过vnc-viewer连接来进行安装
+末尾添加:
+
+```
+vnc_listen = "0.0.0.0"
+vnc_password = "bigdata" #vnc连接密码
+remote_display_port_min = 5900 #vnc最小端口
+remote_display_port_max = 65535 #vnc最大端口
+```
+
+### 3、重启服务
+
+```
+service libvirtd restart
+```
+
+### 4、查看服务是否启动
+
+```
+ps -ef | grep libvirtd
+```
+
+### 5、查看虚拟机
+
+```
+virsh list
+```
+
+## 四、配置网桥
+
+### 1、配置网桥br0
+
+```
+vim /etc/sysconfig/network-scripts/ifcfg-br0
+```
+
+```
+DEVICE=br0
+BOOTPROTO=static
+ONBOOT=yes
+TYPE=Bridge
+IPADDR=192.168.4.233
+NETMASK=255.255.255.0
+DNS2=114.114.114.114
+GATEWAY=192.168.4.1
+DNS1=8.8.8.8
+DELAY=0
+```
+
+```
+vim /etc/sysconfig/network-scripts/ifcfg-eth0
+```
+
+```
+DEVICE=eth0
+BOOTPROTO=none
+HWADDR=6c:0b:84:92:9f:e4
+IPV6INIT=yes
+MTU=1500
+NM_CONTROLLED=yes
+ONBOOT=yes
+TYPE=Ethernet
+USERCTL=no
+PEERDNS=yes
+NM_CONTROLLED=no
+BRIDGE=br0
+```
+
+### 2、重启网络服务
+
+```
+service network restart
+```
+
+### 3、查看网络连接
+
+```
+brctl show
+```
+
+```shell
+#输出如下
+br0     8000.6c0b84929fe4   no      eth0
+                            vnet0
+virbr0      8000.525400b0a7a4   yes     virbr0-nic
+```
+
+五、安装虚拟机
+
+```
+virt-install  --name=vm2 --ram=1024 --vcpus=1 --disk=/data/vm/vm2.img,size=50 --os-type=linux --cdrom=/data/CentOS-6.5-x86_64-bin-DVD1.iso --network=bridge:br0  --vnc --accelerate --force  --autostart
+```
+
+说明：
+*不用把iso放在root目录，要不读取不到
+*如果提示没有权限，将qume用户添加到超级管理员用户组
+
+查看vnc端口号
+
+```
+ps aue | grep vm1
+```
+
+如果是 -vnc 0.0.0.0:0表示端口号5900 -vnc 0.0.0.0:1表示端口号5901，依次类推。
+
+然后就可以在windows下使用vnc-viewer来连接192.168.4.233:5900，并输入设置的密码，即可进行安装了。
+
