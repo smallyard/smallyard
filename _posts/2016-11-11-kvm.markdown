@@ -144,7 +144,7 @@ br0     8000.6c0b84929fe4   no      eth0
 virbr0      8000.525400b0a7a4   yes     virbr0-nic
 ```
 
-五、安装虚拟机
+## 五、安装虚拟机
 
 ```
 virt-install  --name=vm2 --ram=1024 --vcpus=1 --disk=/data/vm/vm2.img,size=50 --os-type=linux --cdrom=/data/CentOS-6.5-x86_64-bin-DVD1.iso --network=bridge:br0  --vnc --accelerate --force  --autostart
