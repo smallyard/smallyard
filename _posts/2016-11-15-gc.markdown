@@ -1,0 +1,50 @@
+---
+layout:     post
+title:      "JAVA GC 简单总结"
+date:       2016-11-15
+author:     "smallyard"
+tags:
+    - java
+---
+
+## GC分代
+
+GC的英文全拼是Garbage Collection，意思是垃圾收集。
+
+Java 将堆内存分为三代来管理：
+- 年轻代 (`Young Generation`)
+- 年老代 (`Old Generation`)
+- 永久代 (`Perm Generation`)
+
+
+**年轻代**：又分为`Eden`、`From`和`To`，其中`From`和`To`又统称为`Survivor Spaces`（幸存区）。年轻代大小可以由`-Xmn`来控制，也可以用`-XX:SurvivorRatio`来控制`Eden`和`Survivor`的比例，使用`–XX:NewRatio`来指定新生代和年老代的大小比例。
+
+**年老代**：用来存放多次垃圾回收依然存活的对象。
+
+**永久代**：来存放方法区。可通过`-XX:PermSize`和`-XX:MaxPermSize`来指定最小值和最大值。
+
+正常情况下，一个对象从创建到销毁，应该是从`Eden`，然后到`Survivor Spaces`（幸存区），再到`Old Generation`（年老代），最后在某次GC下消失。也可能一个对象直接在`Eden`里死掉，也可能一直在`Old Generation`（年老代）存活。
+
+## GC种类
+
+Java GC分为两类：
+
+- `Minar GC`
+- `FULL GC`
+- `Major GC`
+
+**Minar GC**：从年轻代空间（包括 `Eden` 和 `Survivor` 区域）回收内存被称为 Minor GC。
+
+**Major GC**：是清理老年代。
+
+**FULL GC**：是清理整个堆空间—包括年轻代和老年代。
+
+GC的时候，会暂停全世界(`stop-the-world`)，意思是停止所有的应用线程，所以要避免不必要的GC已提高性能。
+
+## GC日志
+
+`-XX:+PrintGCDetails`打印日志详情。
+
+`-XX:+PrintGCTimeStamps`打印时间戳。
+
+`-Xloggc`输出GC日志到文件。
