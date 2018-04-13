@@ -65,9 +65,9 @@
  	window.sendToZipkin = function(serviceName,name,tags){
  		var data = [
 		    {
-		      "traceId": "284ea64e55cb1b29",
+		      "traceId": new Date().getTime().toString() + Math.floor(Math.random() * 10000),
+		      "id": new Date().getTime().toString() + Math.floor(Math.random() * 10000),
 		      "name": name,
-		      "id": "284ea64e55cb1b29",
 		      "kind": "PRODUCER",
 		      "timestamp": new Date().getTime(),
 		      "localEndpoint": {
