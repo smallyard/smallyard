@@ -1,0 +1,60 @@
+<html>
+<head>
+<script
+  src="http://code.jquery.com/jquery-1.12.4.min.js"
+  integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+  crossorigin="anonymous"></script>
+<script>
+(function(){
+  // js error
+  window.addEventListener('error', function(event) { 
+      var message = event.message;
+      var filename = event.filename;
+      var lineno = event.lineno;
+      var colno = event.colno;
+      var href = event.target.location.href;
+      var userAgent = window.navigator.userAgent;
+      alert(message + "\n" + filename + "\n"  + lineno + "\n"  + colno + "\n"  + href  + "\n" + userAgent);
+  });
+  // ajax error
+  var wrapSend = function(originSend){
+    return function(){
+      try{
+        var url = this._runtime.url;
+        var method = this._runtime.method;
+        var start = this._runtime.start;
+        var parm = arguments[0] || "";
+        var status = this.status;
+        var href = window.location.href;
+        var userAgent = window.navigator.userAgent;
+        alert(url + "\n" + method + "\n"  + start + "\n"  + parm + "\n"  + status  + "\n" + href+ "\n" + userAgent);
+      } catch(e){}
+  
+      try {
+              return originSend.apply(this, arguments)
+          } catch(e) {
+              return Function.prototype.apply.call(originSend, this, arguments)
+          }
+    };
+  };
+  var originSend = window.XMLHttpRequest.prototype.send;
+  window.XMLHttpRequest.prototype.send = wrapSend(originSend);
+
+})();
+
+$.ajax({
+  'url':'http://localhost:9411',
+  'contentType':'application/json',
+  'type':'POST'
+});
+
+
+asdfasdfasdfasdf
+
+
+</script>
+</head>
+<body>
+asdasdf
+</body>
+</html>
