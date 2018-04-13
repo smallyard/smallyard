@@ -7,6 +7,8 @@
   crossorigin="anonymous"></script>
 <script>
 (function(){
+	var zipkinUrl = "http://localhost:9411";
+
 	// js error
 	window.addEventListener('error', function(event) { 
    		var message = event.message;
@@ -23,6 +25,9 @@
  		return function(){
  			var parm = arguments[0] || "";
  			this.addEventListener("readystatechange",function(){
+ 				if(this.responseURL.startWith(zipkinUrl)){
+ 					return;
+ 				}
  				if(this.readyState == 4 && this.status >= 400) {
  					try{
  						var tags = {
@@ -63,9 +68,9 @@
 		    }
 		  ]
  		$.ajax({
-		  'url':'http://localhost:9411/api/v2/spans',
-		  'contentType':'application/json',
-		  'data': data.toString()
+		  "url": zipkinUrl + "/api/v2/spans",
+		  "contentType":"application/json",
+		  "data": data.toString()
 		});
  	}
 })();
