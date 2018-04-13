@@ -11,12 +11,6 @@
 
 	// js error
 	window.addEventListener('error', function(event) { 
-   		var message = event.message;
-   		var filename = event.filename;
-   		var lineno = event.lineno;
-   		var colno = event.colno;
-   		var href = event.target.location.href;
-   		var userAgent = window.navigator.userAgent;
    		var tags = {
 			message : event.message,
 			filename : event.filename,
@@ -25,7 +19,7 @@
 			href : window.location.href,
 			userAgent : window.navigator.userAgent
 		}
-		sendToZipkin("ajaxError", this.responseURL, tags);
+		sendToZipkin("jsError", event.filename, tags);
  	});
 
  	// ajax error
