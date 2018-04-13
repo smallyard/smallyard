@@ -21,7 +21,7 @@
   var wrapSend = function(originSend){
     return function(){
       var result;
-
+this.addEventListener("onreadystatechange",function(){alert(this.status)})
   
       try {
               result =  originSend.apply(this, arguments)
