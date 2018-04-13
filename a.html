@@ -25,13 +25,14 @@
  		return function(){
  			var parm = arguments[0] || "";
  			this.addEventListener("readystatechange",function(){
- 				if(this._runtime.url.startWith(zipkinUrl)){
+ 				var url  = this._runtime.url.toString();
+ 				if(url.startWith(zipkinUrl)){
  					return;
  				}
  				if(this.readyState == 4 && this.status >= 400) {
  					try{
  						var tags = {
- 							url : this._runtime.url,
+ 							url : url,
 				 			status : this.status,
 				 			responseText : this.responseText,
 				 			statusText : this.statusText,
