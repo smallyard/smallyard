@@ -17,22 +17,23 @@
    		var userAgent = window.navigator.userAgent;
    		console.log(message + "\n" + filename + "\n"  + lineno + "\n"  + colno + "\n"  + href  + "\n" + userAgent);
  	});
+
  	// ajax error
  	var wrapSend = function(originSend){
  		return function(){
  			var parm = arguments[0] || "";
  			this.addEventListener("readystatechange",function(){
- 				if(this.readyState == 4) {
+ 				if(this.readyState == 4 && this.status >= 400) {
  					try{
-		 				var url = this._runtime.url;
-			 			var method = this._runtime.method;
-			 			var start = this._runtime.start;
-			 			var status = this.status;
-			 			var responseText = this.responseText;
-			 			var statusText = this.statusText;
-			 			var href = window.location.href;
-			 			var userAgent = window.navigator.userAgent;
-			 			console.log(url + "\n" + method + "\n"  + start + "\n"  + status + "\n"  + statusText + "\n"  + responseText + "\n"  + parm  + "\n" + href+ "\n" + userAgent);
+ 						var tags = {
+ 							url : this.responseURL,
+				 			status : this.status,
+				 			responseText : this.responseText,
+				 			statusText : this.statusText,
+				 			href : window.location.href,
+				 			userAgent : window.navigator.userAgent
+ 						}
+		 				sendToZipkin("ajaxError", this.responseURL, tags);
 		 			} catch(e){}
  				}
  			});
@@ -45,6 +46,28 @@
  	};
  	var originSend = window.XMLHttpRequest.prototype.send;
  	window.XMLHttpRequest.prototype.send = wrapSend(originSend);
+
+ 	// send to zipkin
+ 	function sendToZipkin(serviceName,name,tags){
+ 		var data = [
+		    {
+		      "traceId": "284ea64e55cb1b29",
+		      "name": name,
+		      "id": "284ea64e55cb1b29",
+		      "kind": "PRODUCER",
+		      "timestamp": new Date().getTime(),
+		      "localEndpoint": {
+		        "serviceName": serviceName
+		      },
+		      "tags": tags
+		    }
+		  ]
+ 		$.ajax({
+		  'url':'http://localhost:9411/api/v2/spans',
+		  'contentType':'application/json',
+		  'data': data.toString();
+		});
+ 	}
 })();
 
 $.ajax({
