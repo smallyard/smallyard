@@ -17,7 +17,15 @@
    		var colno = event.colno;
    		var href = event.target.location.href;
    		var userAgent = window.navigator.userAgent;
-   		console.log(message + "\n" + filename + "\n"  + lineno + "\n"  + colno + "\n"  + href  + "\n" + userAgent);
+   		var tags = {
+			message : event.message,
+			filename : event.filename,
+			lineno : event.lineno,
+			colno : event.colno,
+			href : window.location.href,
+			userAgent : window.navigator.userAgent
+		}
+		sendToZipkin("ajaxError", this.responseURL, tags);
  	});
 
  	// ajax error
@@ -72,7 +80,7 @@
 		  "url": zipkinUrl,
 		  "type":"POST",
 		  "contentType":"application/json",
-		  "data": data.toString()
+		  "data": JSON.stringify(data);
 		});
  	}
 })();
