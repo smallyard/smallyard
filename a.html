@@ -7,43 +7,42 @@
   crossorigin="anonymous"></script>
 <script>
 (function(){
-  // js error
-  window.addEventListener('error', function(event) { 
-      var message = event.message;
-      var filename = event.filename;
-      var lineno = event.lineno;
-      var colno = event.colno;
-      var href = event.target.location.href;
-      var userAgent = window.navigator.userAgent;
-      alert(message + "\n" + filename + "\n"  + lineno + "\n"  + colno + "\n"  + href  + "\n" + userAgent);
-  });
-  // ajax error
-  var wrapSend = function(originSend){
-    return function(){
-      var result;
-this.addEventListener("readystatechange",function(){alert(this.status)})
-  
-      try {
-              result =  originSend.apply(this, arguments)
-          } catch(e) {
-              result =  Function.prototype.apply.call(originSend, this, arguments)
-          }
-                try{
-        var url = this._runtime.url;
-        var method = this._runtime.method;
-        var start = this._runtime.start;
-        var parm = arguments[0] || "";
-        var status = this.status;
-        var href = window.location.href;
-        var userAgent = window.navigator.userAgent;
-        alert(url + "\n" + method + "\n"  + start + "\n"  + parm + "\n"  + status  + "\n" + href+ "\n" + userAgent);
-      } catch(e){}
-      return result;
-    };
-  };
-  var originSend = window.XMLHttpRequest.prototype.send;
-  window.XMLHttpRequest.prototype.send = wrapSend(originSend);
-
+	// js error
+	window.addEventListener('error', function(event) { 
+   		var message = event.message;
+   		var filename = event.filename;
+   		var lineno = event.lineno;
+   		var colno = event.colno;
+   		var href = event.target.location.href;
+   		var userAgent = window.navigator.userAgent;
+   		console.log(message + "\n" + filename + "\n"  + lineno + "\n"  + colno + "\n"  + href  + "\n" + userAgent);
+ 	});
+ 	// ajax error
+ 	var wrapSend = function(originSend){
+ 		return function(){
+ 			this.addEventListener("readystatechange",function(){
+ 				if(readyState == 4) {
+ 					try{
+		 				var url = this._runtime.url;
+			 			var method = this._runtime.method;
+			 			var start = this._runtime.start;
+			 			var parm = arguments[0] || "";
+			 			var status = this.status;
+			 			var href = window.location.href;
+			 			var userAgent = window.navigator.userAgent;
+			 			alert(url + "\n" + method + "\n"  + start + "\n"  + parm + "\n"  + status  + "\n" + href+ "\n" + userAgent);
+		 			} catch(e){}
+ 				}
+ 			});
+ 			try {
+                return originSend.apply(this, arguments)
+            } catch(p) {
+                return Function.prototype.apply.call(originSend, this, arguments)
+            }
+ 		};
+ 	};
+ 	var originSend = window.XMLHttpRequest.prototype.send;
+ 	window.XMLHttpRequest.prototype.send = wrapSend(originSend);
 })();
 
 $.ajax({
