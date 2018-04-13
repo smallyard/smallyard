@@ -7,7 +7,7 @@
   crossorigin="anonymous"></script>
 <script>
 (function(){
-	var zipkinUrl = "http://localhost:9411";
+	var zipkinUrl = "http://localhost:9411/api/v2/spans";
 
 	// js error
 	window.addEventListener('error', function(event) { 
@@ -51,10 +51,10 @@
  		};
  	};
  	var originSend = window.XMLHttpRequest.prototype.send;
- 	window.XMLHttpRequest.prototype.send = wrapSend(originSend);
+ 	window.XMLHttpRequest.prototype.send = wrapSend(originSend);ßßß
 
  	// send to zipkin
- 	function sendToZipkin(serviceName,name,tags){
+ 	window.sendToZipkin = function(serviceName,name,tags){
  		var data = [
 		    {
 		      "traceId": "284ea64e55cb1b29",
@@ -69,9 +69,9 @@
 		    }
 		  ]
  		$.ajax({
-		  "url": zipkinUrl + "/api/v2/spans",
-		  "contentType":"application/json",
+		  "url": zipkinUrl,
 		  "type":"POST",
+		  "contentType":"application/json",
 		  "data": data.toString()
 		});
  	}
