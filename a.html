@@ -51,7 +51,7 @@
  		};
  	};
  	var originSend = window.XMLHttpRequest.prototype.send;
- 	window.XMLHttpRequest.prototype.send = wrapSend(originSend);ßßß
+ 	window.XMLHttpRequest.prototype.send = wrapSend(originSend);
 
  	// send to zipkin
  	window.sendToZipkin = function(serviceName,name,tags){
