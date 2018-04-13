@@ -71,6 +71,7 @@
  		$.ajax({
 		  "url": zipkinUrl + "/api/v2/spans",
 		  "contentType":"application/json",
+		  "type":"POST",
 		  "data": data.toString()
 		});
  	}
