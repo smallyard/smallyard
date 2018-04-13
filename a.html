@@ -21,7 +21,7 @@
  	var wrapSend = function(originSend){
  		return function(){
  			this.addEventListener("readystatechange",function(){
- 				if(readyState == 4) {
+ 				if(this.readyState == 4) {
  					try{
 		 				var url = this._runtime.url;
 			 			var method = this._runtime.method;
