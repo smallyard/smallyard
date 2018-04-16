@@ -72,8 +72,8 @@
 		    }
 		  ]
 		var xhr = new XMLHttpRequest();
-		xhr.setRequestHeader("Content-type","application/json");
 		xhr.open("post",zipkinUrl);
+		xhr.setRequestHeader("Content-type","application/json");
 		xhr.send(JSON.stringify(data));
  	}
 })();
