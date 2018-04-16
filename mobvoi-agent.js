@@ -26,6 +26,7 @@
                 var parm = arguments[0] || "";
                 this.addEventListener("readystatechange",
                 function() {
+                    debugger;
                     var url = this._runtime.url.toString();
                     if (url.startsWith(zipkinUrl)) {
                         return;
