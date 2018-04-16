@@ -26,8 +26,7 @@
                 var parm = arguments[0] || "";
                 this.addEventListener("readystatechange",
                 function() {
-                    debugger;
-                    var url = this._runtime.url.toString();
+                    var url = this._mobvoi_runtime.url.toString();
                     if (url.startsWith(zipkinUrl)) {
                         return;
                     }
@@ -35,6 +34,7 @@
                         try {
                             var tags = {
                                 url: url,
+                                method: this._mobvoi_runtime.method,
                                 status: this.status,
                                 responseText: this.responseText,
                                 statusText: this.statusText,
@@ -54,6 +54,23 @@
         };
         var originSend = window.XMLHttpRequest.prototype.send;
         window.XMLHttpRequest.prototype.send = wrapSend(originSend);
+
+        var wrapOpen = function(originOpen){
+        	return function(){
+                this._mobvoi_runtime = {
+                	method: arguments[0],
+                    url: arguments[1]
+	            }
+	            try {
+	                return originOpen.apply(this, arguments)
+	            } catch(t) {
+	                return Function.prototype.apply.call(originOpen, this, arguments)
+	            }
+        	}
+        }
+        var originOpen = window.XMLHttpRequest.prototype.open;
+        window.XMLHttpRequest.prototype.open = wrapOpen(originOpen);
+
 
         // send to zipkin
         window.sendToZipkin = function(serviceName, name, tags) {
