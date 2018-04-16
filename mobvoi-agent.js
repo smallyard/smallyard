@@ -3,7 +3,7 @@
  */
 (function() {
   try {
-    var zipkinUrl = "http://localhost:9411/api/v2/spans";
+    var zipkinUrl = "http://prd-be-5.stateless.aws.mobvoi-idc.com:9411/api/v2/spans";
     var projectName = "ticbuy";
 
     /**
