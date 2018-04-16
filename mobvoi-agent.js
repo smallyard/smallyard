@@ -3,7 +3,7 @@
  */
 (function() {
   try {
-    var zipkinUrl = "http://prd-be-5.stateless.aws.mobvoi-idc.com:9411/api/v2/spans";
+    var zipkinUrl = "http://prd-be-4.stateless.aws.mobvoi-idc.com:9411/api/v2/spans";
     var projectName = "ticbuy";
 
     /**
@@ -92,7 +92,7 @@
         "tags": tags
       }]
       var xhr = new XMLHttpRequest();
-      xhr.open("post", zipkinUrl);
+      xhr.open("post", zipkinUrl, true);
       xhr.setRequestHeader("Content-type", "application/json");
       xhr.send(JSON.stringify(data));
     }
