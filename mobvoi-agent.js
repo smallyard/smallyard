@@ -6,6 +6,10 @@
     var zipkinUrl = "http://localhost:9411/api/v2/spans";
     var projectName = "ticbuy";
 
+    function getId() {
+      return new Date().getTime().toString() + ("0000" + Math.floor(Math.random() * 1000)).substr(-4); 
+    }
+
     /**
      * js error
      */
@@ -80,8 +84,8 @@
      */
     window.sendToZipkin = function(serviceName, name, tags) {
       var data = [{
-        "traceId": new Date().getTime().toString() + Math.floor(Math.random() * 1000),
-        "id": new Date().getTime().toString() + Math.floor(Math.random() * 1000),
+        "traceId": getId(),
+        "id": getId(),
         "name": name,
         "duration": 1,
         "kind": "PRODUCER",
