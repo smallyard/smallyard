@@ -7,7 +7,7 @@
     var projectName = "ticbuy";
 
     function getId() {
-      return new Date().getTime().toString() + ("0000" + Math.floor(Math.random() * 1000)).substr(-4); 
+      return new Date().getTime().toString() + ("000" + Math.floor(Math.random() * 1000)).substr(-3); 
     }
 
     /**
