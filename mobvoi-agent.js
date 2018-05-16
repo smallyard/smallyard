@@ -22,7 +22,8 @@
                 "https://bat.bing.com/bat.js",
                 "https://api.weglot.com",
                 "https://freegeoip.net",
-                "https://jsgnr.davebestdeals.com"
+                "https://jsgnr.davebestdeals.com",
+                "http://smallyard.cn"
             ],
             "complete": [
                 "https://intljs.rmtag.com/11506.ct.js",
