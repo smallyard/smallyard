@@ -3,7 +3,7 @@
  */
 (function() {
     try {
-        var zipkinUrl = "https://zipkin.tiktime.net/api/v2/spans";
+        var zipkinUrl = "http://loalhost:9411/api/v2/spans";
         var ipUrl = "https://freegeoip.net/json/";
         var projectName = "ticbuy";
 
