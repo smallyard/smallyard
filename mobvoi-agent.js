@@ -3,7 +3,7 @@
  */
 (function() {
     try {
-        var zipkinUrl = "http://localhost:9411/api/v2/spans";
+        var zipkinUrl = "http//localhost:9411/api/v2/spans";
         var ipUrl = "https://freegeoip.net/json/";
         var projectName = "ticbuy";
 
@@ -19,13 +19,13 @@
                 "cloudfornt.net/ticbuy/js/agent.min.js"
             ],
             "prefix": [
-                "https://bat.bing.com/bat.js", 
-                "https://api.weglot.com", 
-                "https://freegeoip.net", 
+                "https://bat.bing.com/bat.js",
+                "https://api.weglot.com",
+                "https://freegeoip.net",
                 "https://jsgnr.davebestdeals.com"
             ],
             "complete": [
-                "https://intljs.rmtag.com/11506.ct.js", 
+                "https://intljs.rmtag.com/11506.ct.js",
                 "https://certify-js.alexametrics.com/atrk.js"
             ],
             "filter": function(url) {
@@ -91,8 +91,6 @@
                 href: window.location.href,
                 userAgent: window.navigator.userAgent
             }
-            var geoAndIp = getGeoAndIp();
-            extend(tags, geoAndIp);
             sendToZipkin(projectName + "_js_error", event.filename, tags);
         });
 
@@ -135,6 +133,8 @@
                                 href: window.location.href,
                                 userAgent: window.navigator.userAgent
                             }
+                            var geoAndIp = getGeoAndIp();
+                            extend(tags, getGeoAndIp);
                             sendToZipkin(projectName + "_ajax_error", this.responseURL, tags);
                         } catch(e) {}
                     }
