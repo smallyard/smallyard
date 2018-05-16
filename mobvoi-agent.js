@@ -3,7 +3,7 @@
  */
 (function() {
     try {
-        var zipkinUrl = "http://localhost:9411/api/v2/spans";
+        var zipkinUrl = "https://zipkin.tiktime.net/api/v2/spans";
         var ipUrl = "https://freegeoip.net/json/";
         var projectName = "ticbuy";
 
@@ -134,7 +134,7 @@
                                 userAgent: window.navigator.userAgent
                             }
                             var geoAndIp = getGeoAndIp();
-                            extend(tags, getGeoAndIp);
+                            extend(tags, geoAndIp);
                             sendToZipkin(projectName + "_ajax_error", this.responseURL, tags);
                         } catch(e) {}
                     }
