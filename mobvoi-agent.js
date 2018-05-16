@@ -92,7 +92,7 @@
                 userAgent: window.navigator.userAgent
             }
             var geoAndIp = getGeoAndIp();
-            extend(tags, getGeoAndIp);
+            extend(tags, geoAndIp);
             sendToZipkin(projectName + "_js_error", event.filename, tags);
         });
 
