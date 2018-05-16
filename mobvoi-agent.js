@@ -3,7 +3,7 @@
  */
 (function() {
     try {
-        var zipkinUrl = "http//localhost:9411/api/v2/spans";
+        var zipkinUrl = "http://localhost:9411/api/v2/spans";
         var ipUrl = "https://freegeoip.net/json/";
         var projectName = "ticbuy";
 
