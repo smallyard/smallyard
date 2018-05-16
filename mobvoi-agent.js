@@ -3,7 +3,7 @@
  */
 (function() {
     try {
-        var zipkinUrl = "http://loalhost:9411/api/v2/spans";
+        var zipkinUrl = "http://localhost:9411/api/v2/spans";
         var ipUrl = "https://freegeoip.net/json/";
         var projectName = "ticbuy";
 
@@ -22,8 +22,7 @@
                 "https://bat.bing.com/bat.js",
                 "https://api.weglot.com",
                 "https://freegeoip.net",
-                "https://jsgnr.davebestdeals.com",
-                "http://smallyard.cn"
+                "https://jsgnr.davebestdeals.com"
             ],
             "complete": [
                 "https://intljs.rmtag.com/11506.ct.js",
@@ -63,15 +62,17 @@
 
         function getGeoAndIp() {
             var result = {};
-            var xhr = new XMLHttpRequest();
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                    var responseText = xhr.responseText;
-                    result = eval('(' + responseText + ')');
-                }
-            };
-            xhr.open("get", ipUrl, false);
-            xhr.send(null);
+            try {
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState == 4) {
+                        var responseText = xhr.responseText;
+                        result = eval('(' + responseText + ')');
+                    }
+                };
+                xhr.open("get", ipUrl, false);
+                xhr.send(null);
+            } catch(e) {}
             return result;
         }
 
