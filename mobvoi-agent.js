@@ -156,7 +156,7 @@
             if (filterUtil.filter(name)) {
                 return;
             }
-            var geoAndIp = window._geoAndIp || window._geoAndIp = getGeoAndIp();
+            var geoAndIp = window._geoAndIp || (window._geoAndIp = getGeoAndIp());
             extend(tags, geoAndIp);
             var data = [{
                 "traceId": getId(),
