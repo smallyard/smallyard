@@ -29,7 +29,7 @@
                 "https://certify-js.alexametrics.com/atrk.js"
             ],
             "filter": function(url) {
-                return this.preFilter(url) || this.suffixFilter(url) || this.completeFilter(url);
+                return !url || this.preFilter(url) || this.suffixFilter(url) || this.completeFilter(url);
             },
             "preFilter": function(url) {
                 return this.iterFilter(this.prefix, url,
