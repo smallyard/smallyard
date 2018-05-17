@@ -7,7 +7,7 @@
         var ipUrl = "https://freegeoip.net/json/";
         var projectName = "ticbuy";
 
-        function extend(destination, source) {
+        unction extend(destination, source) {
             for (var property in source) {
                 destination[property] = source[property];
             }
@@ -135,8 +135,6 @@
                                 href: window.location.href,
                                 userAgent: window.navigator.userAgent
                             }
-                            var geoAndIp = getGeoAndIp();
-                            extend(tags, geoAndIp);
                             sendToZipkin(projectName + "_ajax_error", this.responseURL, tags);
                         } catch(e) {}
                     }
@@ -158,6 +156,8 @@
             if (filterUtil.filter(name)) {
                 return;
             }
+            var geoAndIp = window._geoAndIp || window._geoAndIp = getGeoAndIp();
+            extend(tags, geoAndIp);
             var data = [{
                 "traceId": getId(),
                 "id": getId(),
