@@ -3,9 +3,12 @@
  */
 (function() {
     try {
-        var zipkinUrl = "http://123.59.135.217:9411/api/v2/spans";
+        var bugTrackerUrl = "http://localhost:8088/log";
         var ipUrl = "https://freegeoip.net/json/";
-        var projectName = "ticbuy";
+        var serviceName = "ticbuy";
+        var modelAjaxError = "ajax-error";
+        var modelJsError = "js-error";
+        var test = false;
 
         function extend(destination, source) {
             for (var property in source) {
@@ -85,7 +88,7 @@
          */
         window.addEventListener("error",
         function(event) {
-            var tags = {
+            var properties = {
                 error: event.message,
                 filename: event.filename,
                 lineno: event.lineno,
@@ -93,7 +96,7 @@
                 href: window.location.href,
                 userAgent: window.navigator.userAgent
             }
-            sendToZipkin(projectName + "_js_error", event.filename, tags);
+            sendToZipkin(serviceName, modelJsError, event.filename, event.message, properties);
         });
 
         /**
@@ -121,12 +124,12 @@
                 this.addEventListener("readystatechange",
                 function() {
                     var url = this._mobvoi_runtime.url.toString();
-                    if (url.startsWith(zipkinUrl)) {
+                    if (url.startsWith(bugTrackerUrl)) {
                         return;
                     }
                     if (this.readyState == 4 && this.status >= 400) {
                         try {
-                            var tags = {
+                            var properties = {
                                 url: url,
                                 method: this._mobvoi_runtime.method,
                                 error: this.status,
@@ -135,7 +138,7 @@
                                 href: window.location.href,
                                 userAgent: window.navigator.userAgent
                             }
-                            sendToZipkin(projectName + "_ajax_error", this.responseURL, tags);
+                            sendToZipkin(serviceName, modelAjaxError, this.responseURL, this.responseText, properties);
                         } catch(e) {}
                     }
                 });
@@ -152,26 +155,23 @@
         /**
          * send to zipkin
          */
-        window.sendToZipkin = function(serviceName, name, tags) {
-            if (filterUtil.filter(name)) {
+        window.sendToZipkin = function(serviceName, model, title, detail, properties) {
+            if (filterUtil.filter(title)) {
                 return;
             }
             var geoAndIp = window._geoAndIp || (window._geoAndIp = getGeoAndIp());
-            extend(tags, geoAndIp);
+            extend(properties, geoAndIp);
             var data = [{
-                "traceId": getId(),
                 "id": getId(),
-                "name": name,
-                "duration": 1,
-                "kind": "PRODUCER",
-                "timestamp": new Date().getTime() * 1000,
-                "localEndpoint": {
-                    "serviceName": serviceName
-                },
-                "tags": tags
+                "service_name": serviceName,
+                "title": title,
+                "detail": detail,
+                "date": new Date().getTime(),
+                "test": test,
+                "properties": properties
             }]
             var xhr = new XMLHttpRequest();
-            xhr.open("post", zipkinUrl, true);
+            xhr.open("post", bugTrackerUrl, true);
             xhr.setRequestHeader("Content-type", "application/json");
             xhr.send(JSON.stringify(data));
         }
