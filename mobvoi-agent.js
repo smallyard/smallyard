@@ -161,7 +161,7 @@
             }
             var geoAndIp = window._geoAndIp || (window._geoAndIp = getGeoAndIp());
             extend(properties, geoAndIp);
-            var data = [{
+            var data = {
                 "id": getId(),
                 "service_name": serviceName,
                 "title": title,
@@ -169,7 +169,7 @@
                 "date": new Date().getTime(),
                 "test": test,
                 "properties": properties
-            }]
+            }
             var xhr = new XMLHttpRequest();
             xhr.open("post", bugTrackerUrl, true);
             xhr.setRequestHeader("Content-type", "application/json");
