@@ -138,7 +138,7 @@
                                 href: window.location.href,
                                 userAgent: window.navigator.userAgent
                             }
-                            sendToBugTracker(serviceName, modelAjaxError, this.responseURL, this.responseText, properties);
+                            sendToBugTracker(serviceName, modelAjaxError, url, this.responseText, properties);
                         } catch(e) {}
                     }
                 });
