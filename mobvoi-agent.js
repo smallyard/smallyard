@@ -164,6 +164,7 @@
             var data = {
                 "id": getId(),
                 "service_name": serviceName,
+                "model": model,
                 "title": title,
                 "detail": detail,
                 "date": new Date(),
