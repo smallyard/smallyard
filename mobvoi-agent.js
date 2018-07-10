@@ -96,7 +96,7 @@
                 href: window.location.href,
                 userAgent: window.navigator.userAgent
             }
-            sendToZipkin(serviceName, modelJsError, event.filename, event.message, properties);
+            sendToBugTracker(serviceName, modelJsError, event.filename, event.message, properties);
         });
 
         /**
@@ -138,7 +138,7 @@
                                 href: window.location.href,
                                 userAgent: window.navigator.userAgent
                             }
-                            sendToZipkin(serviceName, modelAjaxError, this.responseURL, this.responseText, properties);
+                            sendToBugTracker(serviceName, modelAjaxError, this.responseURL, this.responseText, properties);
                         } catch(e) {}
                     }
                 });
@@ -153,9 +153,9 @@
         window.XMLHttpRequest.prototype.send = wrapSend(originSend);
 
         /**
-         * send to zipkin
+         * send to bug-tracker
          */
-        window.sendToZipkin = function(serviceName, model, title, detail, properties) {
+        window.sendToBugTracker = function(serviceName, model, title, detail, properties) {
             if (filterUtil.filter(title)) {
                 return;
             }
