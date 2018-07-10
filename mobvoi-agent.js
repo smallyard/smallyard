@@ -166,7 +166,7 @@
                 "service_name": serviceName,
                 "title": title,
                 "detail": detail,
-                "date": new Date().getTime(),
+                "date": new Date(),
                 "test": test,
                 "properties": properties
             }
