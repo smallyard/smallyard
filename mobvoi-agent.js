@@ -127,7 +127,7 @@
                     if (url.startsWith(bugTrackerUrl)) {
                         return;
                     }
-                    if (this.readyState == 4 && this.status >= 400) {
+                    if (this.readyState == 4 && (this.status >= 400 || this.status == 0)) {
                         try {
                             var properties = {
                                 url: url,
