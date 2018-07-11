@@ -3,7 +3,7 @@
  */
 (function() {
     try {
-        var bugTrackerUrl = "http://bug-tracker.ticwear.com/v1/logs";
+        var bugTrackerUrl = "https://bug-tracker.ticwear.com/v1/logs";
         var ipUrl = "https://freegeoip.net/json/";
         var serviceName = "ticbuy";
         var modelAjaxError = "ajax-error";
