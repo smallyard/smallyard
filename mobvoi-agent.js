@@ -4,7 +4,7 @@
 (function() {
     try {
         var bugTrackerUrl = "https://bug-tracker.ticwear.com/v1/logs";
-        var ipUrl = "https://freegeoip.net/json/";
+        var ipUrl = "https://tools.tiktime.net/v1/ip/lookup";
         var serviceName = "ticbuy";
         var modelAjaxError = "ajax-error";
         var modelJsError = "js-error";
@@ -70,7 +70,7 @@
                 xhr.onreadystatechange = function() {
                     if (xhr.readyState == 4) {
                         var responseText = xhr.responseText;
-                        result = eval('(' + responseText + ')');
+                        result = eval('(' + responseText + ')').data;
                     }
                 };
                 xhr.open("get", ipUrl, false);
@@ -127,7 +127,7 @@
                     if (url.startsWith(bugTrackerUrl)) {
                         return;
                     }
-                    if (this.readyState == 4 && (this.status >= 400 || this.status == 0)) {
+                    if (this.readyState == 4 && this.status >= 400) {
                         try {
                             var properties = {
                                 url: url,
